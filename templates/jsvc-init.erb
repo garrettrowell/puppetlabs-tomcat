@@ -119,7 +119,7 @@ if [ -z "$LOGGING_CONFIG" ]; then
 fi
 
 test ".$LOGGING_MANAGER" = . && LOGGING_MANAGER="-Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager"
-JAVA_OPTS="$JAVA_OPTS $LOGGING_MANAGER"
+JAVA_OPTS="$JAVA_OPTS $LOGGING_MANAGER $LOGGING_CONFIG"
 
 # Set -pidfile
 test ".$CATALINA_PID" = . && CATALINA_PID="$CATALINA_BASE/logs/catalina-daemon.pid"
@@ -151,8 +151,8 @@ do_start()
     -user "$TOMCAT_USER" \
     -pidfile "$CATALINA_PID" \
     -wait 10 \
-    -outfile "SYSLOG" \
-    -errfile "SYSLOG" \
+    -outfile "$CATALINA_BASE/logs/catalina.out" \
+    -errfile "$CATALINA_BASE/logs/catalina.out" \
     -classpath "$CLASSPATH" \
     "$LOGGING_CONFIG" $JAVA_OPTS $CATALINA_OPTS \
     -Dcatalina.base="$CATALINA_BASE" \
@@ -197,8 +197,8 @@ do_version()
      -home "$JAVA_HOME" \
      -pidfile "$CATALINA_PID" \
      -classpath "$CLASSPATH" \
-     -outfile "SYSLOG" \
-     -errfile "SYSLOG" \
+     -outfile "$CATALINA_BASE/logs/catalina.out" \
+     -errfile "$CATALINA_BASE/logs/catalina.out" \
      -version \
      -check \
      $CATALINA_MAIN
