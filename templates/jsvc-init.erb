@@ -142,12 +142,12 @@ if [ "$cygwin" = "false" ]; then
   fi
 fi
 
-JSVC_OPTS="$JSVC_OPTS -umask 0027"
+JSVC_OPTS="$JSVC_OPTS
 
 do_start()
 {
   "$JSVC" $JSVC_OPTS \
-    -java-home "$JAVA_HOME" \
+    -home "$JAVA_HOME" \
     -user "$TOMCAT_USER" \
     -pidfile "$CATALINA_PID" \
     -wait 10 \
@@ -194,7 +194,7 @@ do_stop()
 do_version()
 {
   "$JSVC" \
-     -java-home "$JAVA_HOME" \
+     -home "$JAVA_HOME" \
      -pidfile "$CATALINA_PID" \
      -classpath "$CLASSPATH" \
      -outfile "SYSLOG" \
@@ -215,8 +215,7 @@ case "$1" in
   run )
     shift
       "$JSVC" $* \
-      $JSVC_OPTS \
-      -java-home "$JAVA_HOME" \
+      -home "$JAVA_HOME" \
       -user "$TOMCAT_USER" \
       -pidfile "$CATALINA_PID" \
       -wait 10 \
@@ -224,7 +223,6 @@ case "$1" in
       -outfile "&1" \
       -errfile "&2" \
       -classpath "$CLASSPATH" \
-      "$LOGGING_CONFIG" $JAVA_OPTS $CATALINA_OPTS \
       -Dcatalina.base="$CATALINA_BASE" \
       -Dcatalina.home="$CATALINA_HOME" \
       -Djava.io.tmpdir="$CATALINA_TMP" \
@@ -233,9 +231,11 @@ case "$1" in
     ;;
   start )
     do_start
+    do_status
   ;;
   stop )
     do_stop
+    do_status
   ;;
   status )
     do_status
@@ -243,6 +243,7 @@ case "$1" in
   restart )
     do_stop
     do_start
+    do_status
   ;;
   version )
     do_version
