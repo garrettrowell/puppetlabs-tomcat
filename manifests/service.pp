@@ -74,19 +74,19 @@ define tomcat::service (
   }
 
   if $use_jsvc and $use_init {
-    $_service_name = "tomcat-${name}"
+    $_service_name = pick($service_name, "tomcat-${name}")
     $_hasstatus    = true
     $_hasrestart   = true
-    $_start        = "service tomcat-${name} start"
-    $_stop         = "service tomcat-${name} stop"
-    $_status       = "service tomcat-${name} status"
+    $_start        = "service ${_service_name} start"
+    $_stop         = "service ${_service_name} stop"
+    $_status       = "service ${_service_name} status"
     $_provider     = undef
     # Template uses:
     # - $_catalina_home
     # - $_catalina_base
     # - $java_home
     # - $_user
-    file { "/etc/init.d/tomcat-${name}":
+    file { "/etc/init.d/${_service_name}":
       mode    => '0755',
       content => template('tomcat/jsvc-init.erb'),
     }

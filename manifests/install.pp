@@ -39,6 +39,10 @@ define tomcat::install (
     tomcat::install::package { $package_name:
       package_ensure  => $package_ensure,
       package_options => $package_options,
+      user            => $_user,
+      group           => $_group,
+      manage_user     => $_manage_user,
+      manage_group    => $_manage_group,
     }
   }
 }

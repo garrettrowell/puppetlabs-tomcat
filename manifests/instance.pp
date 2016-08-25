@@ -33,6 +33,7 @@ define tomcat::instance (
   $java_home              = undef,
   $use_jsvc               = undef,
   $use_init               = undef,
+  $service_name           = undef,
 
   #used for single installs. Deprecated?
   $install_from_source    = undef,
@@ -162,6 +163,7 @@ define tomcat::instance (
       use_jsvc      => $use_jsvc,
       use_init      => $use_init,
       user          => $_user,
+      service_name  => $service_name,
     }
   }
 }
